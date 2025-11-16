@@ -711,6 +711,11 @@ uint16_t MC_Control_FastPotentiometerRead(void)
     return MC_Analog_Read(AID_POTENTIOMETER);
 }
 
+uint16_t MC_Control_TEACarI2CRead(void)
+{
+    return 0;
+}
+
 uint16_t MC_Control_VoltageBusRead(void)
 {
     return (uint16_t)(1000.0 * MC_ADC_TO_VOLTAGE(MC_Analog_Read(AID_VOLTAGE)));
