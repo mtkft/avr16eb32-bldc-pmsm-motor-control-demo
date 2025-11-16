@@ -111,10 +111,14 @@ static void Main_PeriodicPrint(void)
 /* Called on main program context from MC_DELAY_MS macro every 1 ms */
 static void PeriodicHandler(mc_status_t status)
 {
-    MC_Control_ReferenceSet(MC_Control_FastPotentiometerRead());
+    //MC_Control_ReferenceSet(MC_Control_FastPotentiometerRead());
     my_pot = MC_Control_PotentiometerRead();
     my_speed = (uint16_t)MC_MCSPEED_TO_RPM(MC_Control_SpeedGet());
-
+    // forget about those lmao
+    //MC_Control_ReferenceSet(MC_Control_TEACarI2CRead());
+    // apparently still need an initial value
+    //my_speed = MC_Control_TEACarI2CRead();
+    
     button_state = ButtonGet();
     switch(status.state)
     {

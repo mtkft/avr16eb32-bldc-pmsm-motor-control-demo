@@ -31,23 +31,23 @@
 #define MC_WAVE_SADDLE                  (7)
 
 /* possible values:  MC_SENSORED_MODE, MC_SENSORLESS_MODE  */
-#define MC_CONTROL_MODE                 MC_SENSORLESS_MODE
+#define MC_CONTROL_MODE                 MC_SENSORED_MODE
 
 /* possible values:  MC_CONTINUOUS_MODE, MC_STEPPED_MODE  */
 #define MC_DRIVE_MODE                   MC_STEPPED_MODE
 
 /* possible values:  MC_WAVE_SINE, MC_WAVE_SVM, MC_WAVE_SADDLE */
-#define MC_WAVE_PROFILE                 MC_WAVE_SADDLE
+#define MC_WAVE_PROFILE                 MC_WAVE_SINE
 
 
 /* motor specific settings */
 #define MOTOR_PHASE_ADVANCE             (15.0)   /* degrees */
 #define MC_MOTOR_PAIR_POLES             (4)      /* pole pairs */
-#define MC_MOTOR_PHASE_PHASE_RESISTANCE (0.4)    /* ohm */
-#define MC_MOTOR_KV                     (0.007)  /* volt/rpm */
+#define MC_MOTOR_PHASE_PHASE_RESISTANCE (0.08)    /* ohm */
+#define MC_MOTOR_KV                     (0.0003571429)  /* volt/rpm */
 #define MC_RAMP_UP_DURATION             (1000)   /* milliseconds */
 #define MC_RAMP_DOWN_DURATION           (0)      /* milliseconds */
-#define MC_STARTUP_CURRENT              (2.5)    /* initial current amplitude [amperes] */
+#define MC_STARTUP_CURRENT              (0.5)    /* initial current amplitude [amperes] */
 #define MC_STARTUP_SPEED                (400)    /* switchover speed [rpm] */
 
 /* PWM drive settings */

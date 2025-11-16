@@ -26,14 +26,14 @@
 #include "mc_pins.h"
 #include "mc_internal_defines.h"
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #include "tce0.h"
 #include "wex0.h"
 #include "tcb.h"
 #endif /* __AVR16EB32__ */
 
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #define _MC_PWM_PINS_SET()            do{PWM_AH_PORT.DIRSET = PWM_AH_PIN;\
                                          PWM_AL_PORT.DIRSET = PWM_AL_PIN;\
                                          PWM_BH_PORT.DIRSET = PWM_BH_PIN;\
