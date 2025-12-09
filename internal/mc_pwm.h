@@ -34,7 +34,7 @@
 
 #if MC_DRIVE_MODE == MC_CONTINUOUS_MODE
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #define MC_BEMF_SAMPLING_POINT          0.03
 #endif /* __AVR16EB32__ */
 

@@ -37,7 +37,7 @@
 /**
  * Configures the Fuse bits.
  */
-FUSES = 
+/*FUSES = 
 {
   .BODCFG = ACTIVE_DISABLE_gc | LVL_BODLEVEL0_gc | SAMPFREQ_128HZ_gc | SLEEP_DISABLE_gc,
   .BOOTSIZE = 0x0,
@@ -48,3 +48,4 @@ FUSES =
   .SYSCFG1 = SUT_64MS_gc,
   .WDTCFG = PERIOD_OFF_gc | WINDOW_OFF_gc,
 };
+*/

@@ -176,7 +176,7 @@ static inline void Map(mc_int_dcy_t a, mc_int_dcy_t b) {(void)a; (void)b;}
 #endif /* (MC_SCALE_MODE == MC_SCALE_BOTTOM) && (MC_DRIVE_MODE == MC_CONTINUOUS_MODE) */
 
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 void MC_TCE0_Initialize(void)
 { 
     TCE0_PrescalerSet(TCE_CLKSEL_DIV1_gc);

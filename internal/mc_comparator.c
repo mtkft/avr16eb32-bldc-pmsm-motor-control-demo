@@ -26,9 +26,9 @@
 #include "ac.h"
 #include "evsys.h"
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #include "wex0.h"
-#endif /* __AVR16EB32__ */
+#endif /* __AVR16EB28__ */
 
 #define _MC_COMP_MUX_S0                 (PHASE_A_AC_PIN | PHASE_N_AC_PIN)          
 #define _MC_COMP_MUX_S1                 (PHASE_B_AC_PIN | PHASE_N_AC_PIN) 
@@ -49,7 +49,7 @@ void AC_Pins_Init(void)
     PHASE_N_PORT.PHASE_N_CTRL &= ~PORT_PULLUPEN_bm;   
 }
 
-#ifdef __AVR16EB32__ // Hardware Implementation with specific calls for AVR-EB 
+#ifdef __AVR16EB28__ // Hardware Implementation with specific calls for AVR-EB 
 #define _MC_COMP_INIT()                 do{AC_Pins_Init(); AC0_Initialize();}while(0)
 #define _MC_COMP_FAULT_INIT()           do{AC_Pins_Init(); AC1_Initialize(); AC1_MUXSET(CRT_FAULT_AC_PIN | AC_MUXNEG_DACREF_gc | AC_INITVAL_LOW_gc); AC1_DACRefValue(255); _delay_us(10); Evsys_Init();}while(0)
 #define _MC_COMP_MUX_SET                AC0_MUXPOS

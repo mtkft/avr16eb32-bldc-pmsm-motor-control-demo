@@ -25,12 +25,16 @@
 #include "motor_control.h"
 #include "reset.h"
 #include "button_led.h"
+#include "mcc_generated_files/i2c_client/twi0.h"
+#include "usart0_dvrt.h"
+#include "usart0.h"
+#include <avr/io.h>
 
 uint16_t    volatile  my_speed;
 uint16_t    volatile  my_pot;
 
-static led_ctrl_t     led_ctrl;
-static button_state_t button_state;
+/*static led_ctrl_t     led_ctrl;
+static button_state_t button_state;*/
 
 #define MC_COMM_INIT()
 #define PRINT_OUT(...)
@@ -52,9 +56,9 @@ static button_state_t button_state;
 
 static void PrintConfig(void)
 {
-    #ifdef __AVR16EB32__
-    PRINT_OUT("\n\rPlatform: AVR16EB32");
-    #endif /* __AVR16EB32__ */
+    #ifdef __AVR16EB28__
+    PRINT_OUT("\n\rPlatform: AVR16EB28");
+    #endif /* __AVR16EB28__ */
     PRINT_OUT("\n\rDrive, sensing:        %s, %s", (MC_DRIVE_MODE==MC_STEPPED_MODE)? "trapezoidal" : "sinusoidal", (MC_CONTROL_MODE==MC_SENSORLESS_MODE)? "sensorless" : "sensored");
     PRINT_OUT("\n\rMotor pole-pairs no:   %u", MC_MOTOR_PAIR_POLES);
     PRINT_OUT("\n\rMotor phase-phase res: %u mOhm", (int)(1000.0 * MC_MOTOR_PHASE_PHASE_RESISTANCE));
@@ -108,18 +112,24 @@ static void Main_PeriodicPrint(void)
              );
 }
 
+// called at I2C data interrupt
+static bool I2CHandler(i2c_client_transfer_event_t clientEvent)
+{
+    my_pot = TWI0_ReadByte();
+}
+
 /* Called on main program context from MC_DELAY_MS macro every 1 ms */
 static void PeriodicHandler(mc_status_t status)
 {
     //MC_Control_ReferenceSet(MC_Control_FastPotentiometerRead());
-    my_pot = MC_Control_PotentiometerRead();
+    my_pot = TWI0_ReadByte();///*USART0_Read()*/USART0.RXDATAL<<8;//MC_Control_TEACarI2CRead();//MC_Control_PotentiometerRead();
+    //USART0.RXDATAL=0;
     my_speed = (uint16_t)MC_MCSPEED_TO_RPM(MC_Control_SpeedGet());
     // forget about those lmao
-    //MC_Control_ReferenceSet(MC_Control_TEACarI2CRead());
-    // apparently still need an initial value
-    //my_speed = MC_Control_TEACarI2CRead();
     
-    button_state = ButtonGet();
+    MC_Control_ReferenceSet((uint16_t)(my_pot&0x7fff));
+    
+    /*button_state = ButtonGet();
     switch(status.state)
     {
         case IDLE:      led_ctrl = LED_OFF;    break;
@@ -127,7 +137,7 @@ static void PeriodicHandler(mc_status_t status)
         case FAULT:     led_ctrl = LED_BLINK;  break;
         default:                               break; 
     }
-    LedControl(led_ctrl);
+    LedControl(led_ctrl);*/
 
     if(status.state == RUNNING)
     {
@@ -149,8 +159,12 @@ int main(void)
     MC_COMM_INIT();
     PRINT_OUT("\n\r============= START ================= ");
     MC_Control_Initialize();
-    led_ctrl = LED_OFF;
+    //led_ctrl = LED_OFF;
     MC_Control_PeriodicHandlerRegister(PeriodicHandler);
+    TWI0_Initialize();
+    TWI0_CallbackRegister(I2CHandler);
+    //USART0_Initialize();
+    //USART0_EnableRx();
     MC_DELAY_MS(500);
 
     mc_status_t prev_motor_state; prev_motor_state.state = -1;
@@ -161,10 +175,13 @@ int main(void)
     {
         MC_DELAY_MS(BUTTON_LED_TIME_STEP);
         mc_status_t motor_state = MC_Control_StatusGet();
+        
+        direction = my_pot<0? MC_DIR_CW : MC_DIR_CCW;
+        USART0_Write(my_pot>>8);
 
-        if((button_state != BUTTON_IDLE) || (motor_state.word != prev_motor_state.word))
-        {
-            if (button_state == BUTTON_LONG_PRESS)
+        //if((button_state != BUTTON_IDLE) || (motor_state.word != prev_motor_state.word))
+        //{
+            /*if (button_state == BUTTON_LONG_PRESS)
             {
                 if(motor_state.state == RUNNING)
                 {
@@ -174,15 +191,15 @@ int main(void)
                 PRINT_OUT("\n\r============= REBOOT ================ ");
                 MC_DELAY_MS(10);
                 ResetDevice();
-            }
+            }*/
             switch(motor_state.state)
             {
-                case IDLE:      if(button_state == BUTTON_SHORT_PRESS)
+                case IDLE:      if(my_pot > 5)
                                 {
                                     PRINT_OUT("\n\rRamping-up ... %s", (direction==MC_DIR_CW)? "CW":"CCW");
                                     MC_Control_StartStop(direction);
-                                    if(direction == MC_DIR_CW) direction = MC_DIR_CCW;
-                                    else                       direction = MC_DIR_CW;
+                                    /*if(my_pot > 5) direction = MC_DIR_CCW;*/
+                                    //else                       direction = MC_DIR_CW;
                                     #if MC_CONTROL_MODE == MC_SENSORED_MODE
                                     PRINT_OUT("\n\rHall Error code (0=OK) = %d", MC_Control_HallError_Get());
                                     #endif /* MC_CONTROL_MODE == MC_SENSORED_MODE */
@@ -192,7 +209,7 @@ int main(void)
                                     PRINT_OUT("\n\rMotor idle");
                                 }
                                 break;
-                case RUNNING:   if(button_state == BUTTON_SHORT_PRESS) 
+                case RUNNING:   if(my_pot < 5)//button_state == BUTTON_SHORT_PRESS) 
                                 {
                                     PRINT_OUT("\n\rRamping-down");
                                     MC_Control_StartStop(0);
@@ -201,12 +218,12 @@ int main(void)
                                 {
                                     PRINT_OUT("\n\rMotor running");
                                 }
-                                break;
-                case FAULT:     Main_ShowFaults(motor_state);
-                                break;
+                                //break;
+                //case FAULT:     Main_ShowFaults(motor_state);
+                                //break;
                 default: break;        
             }
             prev_motor_state = motor_state;
-        }
+        //}
     }
 }

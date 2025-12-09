@@ -27,6 +27,7 @@
 #include "adc0.h"
 #include "mc_control_analog.h"
 #include "mc_control_fault.h"
+#include <mcc_generated_files/i2c_client/twi0.h>
 
 #define MC_ANALOG_FILTER                true
 
@@ -109,6 +110,7 @@ void MC_Analog_Initialize(void)
     FilterClear(AID_VOLTAGE);
     FilterClear(AID_TEMPERATURE);
     FilterClear(AID_POTENTIOMETER);
+    //TWI0_Initialize();
     
     _MC_ANALOG_CURRENT();
 }

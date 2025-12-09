@@ -30,7 +30,7 @@
 /**
   Section: Macro Declarations
 */
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 static const uart_drv_interface_t *UART = &UART0;
 #endif /* __AVR16EB32__ */
 

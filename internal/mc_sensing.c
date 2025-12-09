@@ -43,6 +43,7 @@ static inline void MC_Hall_Initialize(void)
     HA_PORT.DIRCLR = HA_PIN;
     HB_PORT.DIRCLR = HB_PIN;
     HC_PORT.DIRCLR = HC_PIN;
+    //HB_PORT.PIN1CTRL = HB_PORT.PIN1CTRL | PORT_INVEN_bm; // application issue with XeRun 2848
 }
 
 void MC_Sensing_Initialize(void)

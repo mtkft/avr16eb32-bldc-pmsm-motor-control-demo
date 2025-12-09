@@ -36,7 +36,7 @@
 #include "usart0.h"
 #include "mc_config.h"
 
-#if MC_PRINTOUT_ENABLED == true
+//#if MC_PRINTOUT_ENABLED == true
 
 #if defined(__GNUC__)
 
@@ -64,7 +64,7 @@ void USART0_Initialize()
     PORTC.DIRSET = PIN1_bm;
    
     //set baud rate register
-    USART0.BAUD = USART0_BAUD_RATE(460800);
+    USART0.BAUD = USART0_BAUD_RATE(9600);
 	
     //RXCIE disabled; TXCIE disabled; DREIE disabled; RXSIE disabled; LBME disabled; ABEIE disabled; RS485 DISABLE; 
     USART0.CTRLA = 0x00;
@@ -72,8 +72,8 @@ void USART0_Initialize()
     //RXEN disabled; TXEN enabled; SFDEN disabled; ODME disabled; RXMODE NORMAL; MPCM disabled; 
     USART0.CTRLB = 0x40;
 	
-    //CMODE ASYNCHRONOUS; PMODE DISABLED; SBMODE 1BIT; CHSIZE 8BIT; UDORD disabled; UCPHA disabled; 
-    USART0.CTRLC = 0x03;
+    //CMODE ASYNCHRONOUS; PMODE EVEN; SBMODE 1BIT; CHSIZE 8BIT; UDORD disabled; UCPHA disabled; 
+    USART0.CTRLC = 0x03 | USART_PMODE_EVEN_gc;
 	
     //DBGCTRL_DBGRUN
     USART0.DBGCTRL = 0x00;
@@ -150,5 +150,5 @@ void USART0_Write(const uint8_t data)
             ;
     USART0.TXDATAL = data;
 }
-#endif /* MC_PRINTOUT_ENABLED */
+//#endif /* MC_PRINTOUT_ENABLED */
 

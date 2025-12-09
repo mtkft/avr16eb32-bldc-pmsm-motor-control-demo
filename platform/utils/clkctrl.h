@@ -30,7 +30,7 @@
 #define	CLKCTRL_H
 
 /* choose between: 4000000, 8000000, 12000000, 16000000, 20000000 */
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #define F_CPU    20000000UL
 #endif /* __AVR16EB32__ */
 

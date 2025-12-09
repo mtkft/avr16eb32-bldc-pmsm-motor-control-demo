@@ -145,9 +145,9 @@
 #define VBUS_CTRL           PIN0CTRL
 #define VBUS_ADC_PIN        ADC_MUXPOS_AIN28_gc
 // Potentiometer superseded by I2C
-#define POT_PORT            PORTC
+#define POT_PORT            PORTF
 #define POT_CTRL            PIN1CTRL
-#define POT_ADC_PIN         ADC_MUXPOS_AIN29_gc
+#define POT_ADC_PIN         ADC_MUXPOS_AIN17_gc
 // I2C isn't technically analog but it can live here near its predecessor
 #define I2C_PORT            PORTC
 #define I2C_CTRLA           TWI_CTRLA

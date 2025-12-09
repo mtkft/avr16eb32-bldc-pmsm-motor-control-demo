@@ -34,21 +34,21 @@
 #define MC_CONTROL_MODE                 MC_SENSORED_MODE
 
 /* possible values:  MC_CONTINUOUS_MODE, MC_STEPPED_MODE  */
-#define MC_DRIVE_MODE                   MC_STEPPED_MODE
+#define MC_DRIVE_MODE                   MC_CONTINUOUS_MODE
 
 /* possible values:  MC_WAVE_SINE, MC_WAVE_SVM, MC_WAVE_SADDLE */
-#define MC_WAVE_PROFILE                 MC_WAVE_SINE
+#define MC_WAVE_PROFILE                 MC_WAVE_SADDLE
 
 
 /* motor specific settings */
-#define MOTOR_PHASE_ADVANCE             (15.0)   /* degrees */
-#define MC_MOTOR_PAIR_POLES             (4)      /* pole pairs */
+#define MOTOR_PHASE_ADVANCE             (30.0)   /* degrees */
+#define MC_MOTOR_PAIR_POLES             (4)     /* pole pairs */
 #define MC_MOTOR_PHASE_PHASE_RESISTANCE (0.08)    /* ohm */
 #define MC_MOTOR_KV                     (0.0003571429)  /* volt/rpm */
-#define MC_RAMP_UP_DURATION             (1000)   /* milliseconds */
-#define MC_RAMP_DOWN_DURATION           (0)      /* milliseconds */
-#define MC_STARTUP_CURRENT              (0.5)    /* initial current amplitude [amperes] */
-#define MC_STARTUP_SPEED                (400)    /* switchover speed [rpm] */
+#define MC_RAMP_UP_DURATION             (2000)   /* milliseconds */
+#define MC_RAMP_DOWN_DURATION           (1000)      /* milliseconds */
+#define MC_STARTUP_CURRENT              (0.250)    /* initial current amplitude [amperes] */
+#define MC_STARTUP_SPEED                (1600)    /* switchover speed [rpm] */
 
 /* PWM drive settings */
 /* possible values:  15000 - 45000 Hz */
@@ -66,15 +66,15 @@
 
 /* application settings */
 #define MC_DVRT_ENABLED                 false    /* MC_DVRT_ENABLED and MC_PRINTOUT_ENABLED cannot be both true at the same time */
-#define MC_PRINTOUT_ENABLED             true     /* MC_DVRT_ENABLED and MC_PRINTOUT_ENABLED cannot be both true at the same time */
-#define MC_PRINTOUT_REFRESH_INTERVAL    (1000)   /* milliseconds */
+#define MC_PRINTOUT_ENABLED             false    /* MC_DVRT_ENABLED and MC_PRINTOUT_ENABLED cannot be both true at the same time */
+#define MC_PRINTOUT_REFRESH_INTERVAL    (0100)   /* milliseconds */
 
 /* control functionality settings */
 #define MC_SPEED_REGULATOR_EN           true     /* enables a basic speed regulator, not tunable */
-#define MC_SPEED_REGULATOR_MIN          (0500.0) /* min speed = pot min */
-#define MC_SPEED_REGULATOR_MAX          (3500.0) /* max speed = pot max */
-#define MC_SYNCHRONIZED                 true     /* this enables the synchronization between stator and rotor, should be always enabled */
-#define MC_FAULT_ENABLED                true     /* this enables the fault signalling and emergency stop, should be always enabled */
+#define MC_SPEED_REGULATOR_MIN          (0060.0) /* min speed = pot min */
+#define MC_SPEED_REGULATOR_MAX          (31080.0) /* max speed = pot max */
+#define MC_SYNCHRONIZED                 false    /* this enables the synchronization between stator and rotor, should be always enabled */
+#define MC_FAULT_ENABLED                false     /* this enables the fault signalling and emergency stop, should be always enabled */
 
 
 #endif	/* MC_CONFIG_H */

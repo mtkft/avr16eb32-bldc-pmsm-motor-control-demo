@@ -3,7 +3,7 @@
 
 #include "mc_config.h"
 
-#ifdef __AVR16EB32__
+#ifdef __AVR16EB28__
 #if MC_DVRT_ENABLED == true
 #include "uart_drv_interface.h"
 #include "usart0_dvrt.h"

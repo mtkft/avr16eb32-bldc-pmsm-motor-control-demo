@@ -41,9 +41,12 @@
  * in the MPLAB-X IDE by navigating to Tools -> Options -> Embedded -> MISRA Check.
  */
 
+#include <avr/io.h>
+#include <stddef.h> // you serious right now?!
 #include "twi0.h"
 #include <stdbool.h>
 #include "../system/utils/compiler.h"
+#include "mcc_generated_files/system/port.h"
 
 const i2c_client_interface_t I2C0_Client = 
 {
@@ -66,6 +69,9 @@ static bool(*TWI0_InterruptHandler)(i2c_client_transfer_event_t clientEvent);
 
 void TWI0_Initialize(void)
 {
+    //PORTC.PIN2CTRL |= PORT_PULLUPEN_bm;
+    //PORTC.PIN3CTRL |= PORT_PULLUPEN_bm;
+    
     // FMPEN OFF; INPUTLVL I2C; SDAHOLD OFF; SDASETUP 4CYC; 
     TWI0.CTRLA = 0x0;
     
@@ -73,13 +79,13 @@ void TWI0_Initialize(void)
     TWI0.DBGCTRL = 0x0;
     
     // Client Address
-    TWI0.SADDR = 0x0;
+    TWI0.SADDR = 0x2b;
     
     // ADDREN disabled; ADDRMASK 0x0; 
     TWI0.SADDRMASK = 0x0;
     
-    // APIEN disabled; DIEN disabled; ENABLE enabled; PIEN enabled; PMEN disabled; SMEN disabled; 
-    TWI0.SCTRLA = 0x21;
+    // APIEN disabled; DIEN enabled; ENABLE enabled; PIEN now disabled; PMEN also enabled; SMEN also enabled; 
+    TWI0.SCTRLA = TWI_DIEN_bm|TWI_PMEN_bm|TWI_SMEN_bm|TWI_ENABLE_bm;
     
     //ACKACT ACK; SCMD NOACT; 
     TWI0.SCTRLB = 0x0;
@@ -157,10 +163,10 @@ i2c_client_ack_status_t TWI0_LastByteAckStatusGet(void)
 
 void TWI0_CallbackRegister(bool(*callback)(i2c_client_transfer_event_t clientEvent))
 {
-    if (callback != NULL)
-    {
+    /*if (callback != NULL)
+    {*/
         TWI0_InterruptHandler = callback;
-    }
+    //}
 }
 
 static void TWI0_ErrorEventHandler(void)

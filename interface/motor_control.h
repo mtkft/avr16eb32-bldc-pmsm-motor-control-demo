@@ -102,6 +102,7 @@ void MC_Control_DelayMs(uint32_t delay_ms);
  */
 void MC_Control_ReferenceSet(uint16_t ref);
 
+int16_t MC_Control_TEACarI2CRead();
 
 /**
  * @ingroup mclib

@@ -186,7 +186,7 @@ static void _RampUp(void)
     mc_ramp_t spd, amp;
     uint16_t end;
     uint16_t adc_vbus;
-    adc_vbus = MC_Analog_Read(AID_VOLTAGE);
+    adc_vbus = 11.1;//MC_Analog_Read(AID_VOLTAGE);
 
     end = MC_RPM_TO_MCSPEED(MC_STARTUP_SPEED);
     MC_Ramp_Init(0, end, MC_RAMP_UP_DURATION, &spd);
@@ -709,11 +709,6 @@ uint8_t MC_Control_PotentiometerRead(void)
 uint16_t MC_Control_FastPotentiometerRead(void)
 {
     return MC_Analog_Read(AID_POTENTIOMETER);
-}
-
-uint16_t MC_Control_TEACarI2CRead(void)
-{
-    return 0;
 }
 
 uint16_t MC_Control_VoltageBusRead(void)
